@@ -114,7 +114,7 @@ vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Move Up" })
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
+  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
   end,
@@ -139,7 +139,9 @@ require("lazy").setup({
 -- Detect tabstop and shiftwidth automatically
 'tpope/vim-sleuth',
 -- "gc" to comment visual regions/lines
-{ 'numToStr/Comment.nvim', opts = {} },
+{ import = "custom.plugins.comment" },
+-- Adds git related signs to the gutter, as well as utilities for managing changes
+{ import = "custom.plugins.gitsigns" },
 -- Useful plugin to show you pending keybinds.
 { import = "custom.plugins.which-key" },
 { import = "custom.plugins.telescope" },
@@ -148,8 +150,14 @@ require("lazy").setup({
  -- Autocompletion
 { import = "custom.plugins.cmp" },
 { import = "custom.plugins.ui.catppuccin" },
+{ import = "custom.plugins.todo-comments" },
 --{ import = "custom.plugins.ui.tokyonight" },
+-- Collection of various small independent plugins/modules
+{ import = "custom.plugins.mini" },
+-- Highlight, edit, and navigate code
+{ import = "custom.plugins.nvim-treesitter" },
 { import = "custom.plugins.nvim-tree" },
+{ import = "custom.plugins.barbar" },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
