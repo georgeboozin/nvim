@@ -145,7 +145,12 @@ require("lazy").setup({
     -- Fuzzy Finder (files, lsp, etc)
     { import = "custom.plugins.telescope" },
     -- LSP Configuration & Plugins
+    -- { import = "custom.plugins.kickstart-lspconfig" },
+
+    { import = "custom.plugins.mason" },
     { import = "custom.plugins.lspconfig" },
+    { import = "custom.plugins.rustaceanvim" },
+
     -- Autoformat
     { import = "custom.plugins.conform" },
     -- Autocompletion
