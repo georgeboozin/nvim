@@ -140,6 +140,8 @@ require("lazy").setup({
     { import = "custom.plugins.comment" },
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     { import = "custom.plugins.gitsigns" },
+    { import = "custom.plugins.diffview" },
+
     -- Useful plugin to show you pending keybinds.
     { import = "custom.plugins.which-key" },
     -- Fuzzy Finder (files, lsp, etc)
