@@ -146,13 +146,12 @@ require("lazy").setup({
     { import = "custom.plugins.telescope" },
     -- LSP Configuration & Plugins
     -- { import = "custom.plugins.kickstart-lspconfig" },
-
     { import = "custom.plugins.mason" },
     { import = "custom.plugins.lspconfig" },
     { import = "custom.plugins.rustaceanvim" },
-
     -- Autoformat
     { import = "custom.plugins.conform" },
+    { import = "custom.plugins.rust-vim" },
     -- Autocompletion
     { import = "custom.plugins.cmp" },
     -- You can easily change to a different colorscheme.
