@@ -142,6 +142,7 @@ require("lazy").setup({
     { import = "custom.plugins.gitsigns" },
     -- Useful plugin to show you pending keybinds.
     { import = "custom.plugins.which-key" },
+    -- Fuzzy Finder (files, lsp, etc)
     { import = "custom.plugins.telescope" },
     -- LSP Configuration & Plugins
     { import = "custom.plugins.lspconfig" },
@@ -149,14 +150,18 @@ require("lazy").setup({
     { import = "custom.plugins.conform" },
     -- Autocompletion
     { import = "custom.plugins.cmp" },
+    -- You can easily change to a different colorscheme.
     { import = "custom.plugins.ui.catppuccin" },
-    { import = "custom.plugins.todo-comments" },
     --{ import = "custom.plugins.ui.tokyonight" },
+    -- Highlight todo, notes, etc in comments
+    { import = "custom.plugins.todo-comments" },
     -- Collection of various small independent plugins/modules
     { import = "custom.plugins.mini" },
     -- Highlight, edit, and navigate code
     { import = "custom.plugins.nvim-treesitter" },
+    -- Folder structure
     { import = "custom.plugins.nvim-tree" },
+    -- UI tabs
     { import = "custom.plugins.barbar" },
 }, {
     ui = {
