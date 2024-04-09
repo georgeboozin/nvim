@@ -141,7 +141,6 @@ require("lazy").setup({
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     { import = "custom.plugins.gitsigns" },
     { import = "custom.plugins.diffview" },
-
     -- Useful plugin to show you pending keybinds.
     { import = "custom.plugins.which-key" },
     -- Fuzzy Finder (files, lsp, etc)
@@ -157,7 +156,6 @@ require("lazy").setup({
     -- Autocompletion
     { import = "custom.plugins.cmp" },
     { import = "custom.plugins.autopairs" },
-
     -- You can easily change to a different colorscheme.
     { import = "custom.plugins.ui.catppuccin" },
     --{ import = "custom.plugins.ui.tokyonight" },
@@ -181,6 +179,8 @@ require("lazy").setup({
     { import = "custom.plugins.nvim-ufo" },
     -- indent line or code block line
     { import = "custom.plugins.indent-blankline" },
+    -- navigation between tmux terminals
+    { import = "custom.plugins.tmux-navigator" },
 }, {
     ui = {
         -- If you are using a Nerd Font: set icons to an empty table which will use the
