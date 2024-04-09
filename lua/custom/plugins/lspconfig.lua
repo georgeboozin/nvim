@@ -83,7 +83,17 @@ return {
         capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
         require("mason-tool-installer").setup({
-            ensure_installed = { "rust-analyzer", "lua-language-server", "stylua", "codelldb" },
+            ensure_installed = {
+                -- rust
+                "rust-analyzer",
+                "codelldb",
+                -- lua
+                "lua-language-server",
+                "stylua",
+                -- javascript
+                "typescript-language-server",
+                "eslint-lsp",
+            },
         })
 
         local lspconfig = require("lspconfig")
@@ -95,6 +105,14 @@ return {
                     },
                 },
             },
+        })
+
+        lspconfig.tsserver.setup({
+            capabilities = capabilities,
+        })
+
+        lspconfig.eslint.setup({
+            capabilities = capabilities,
         })
     end,
 }

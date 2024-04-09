@@ -156,6 +156,8 @@ require("lazy").setup({
     { import = "custom.plugins.conform" },
     -- Autocompletion
     { import = "custom.plugins.cmp" },
+    { import = "custom.plugins.autopairs" },
+
     -- You can easily change to a different colorscheme.
     { import = "custom.plugins.ui.catppuccin" },
     --{ import = "custom.plugins.ui.tokyonight" },
@@ -173,6 +175,8 @@ require("lazy").setup({
     { import = "custom.plugins.debugger.dap" },
     { import = "custom.plugins.debugger.dap-ui" },
     { import = "custom.plugins.debugger.dap-virtual-text" },
+    --javascript
+    { import = "custom.plugins.ts-autotag" },
 }, {
     ui = {
         -- If you are using a Nerd Font: set icons to an empty table which will use the
