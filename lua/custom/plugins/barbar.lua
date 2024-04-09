@@ -9,6 +9,7 @@ return {
     end,
     config = function()
         require("barbar").setup({
+            animation = false,
             sidebar_filetypes = {
                 -- Use the default values: {event = 'BufWinLeave', text = '', align = 'left'}
                 NvimTree = true,
