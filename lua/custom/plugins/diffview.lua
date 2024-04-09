@@ -1,11 +1,5 @@
 return {
-    "lewis6991/gitsigns.nvim",
-    dependencies = {
-        {
-            "sindrets/diffview.nvim",
-            config = true,
-        },
-    },
+    "sindrets/diffview.nvim",
     config = function()
         local map = vim.keymap.set
         map("n", "<leader>gdd", "<cmd> DiffviewOpen<CR>", { desc = "Open git diffview" })
