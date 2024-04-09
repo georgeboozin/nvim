@@ -177,7 +177,10 @@ require("lazy").setup({
     { import = "custom.plugins.debugger.dap-virtual-text" },
     --javascript
     { import = "custom.plugins.ts-autotag" },
+    -- code folding
     { import = "custom.plugins.nvim-ufo" },
+    -- indent line or code block line
+    { import = "custom.plugins.indent-blankline" },
 }, {
     ui = {
         -- If you are using a Nerd Font: set icons to an empty table which will use the
