@@ -168,6 +168,10 @@ require("lazy").setup({
     { import = "custom.plugins.nvim-tree" },
     -- UI tabs
     { import = "custom.plugins.barbar" },
+    -- debugger
+    { import = "custom.plugins.debugger.dap" },
+    { import = "custom.plugins.debugger.dap-ui" },
+    { import = "custom.plugins.debugger.dap-virtual-text" },
 }, {
     ui = {
         -- If you are using a Nerd Font: set icons to an empty table which will use the

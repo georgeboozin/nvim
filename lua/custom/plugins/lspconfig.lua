@@ -83,7 +83,7 @@ return {
         capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
         require("mason-tool-installer").setup({
-            ensure_installed = { "rust-analyzer", "lua-language-server", "stylua" },
+            ensure_installed = { "rust-analyzer", "lua-language-server", "stylua", "codelldb" },
         })
 
         local lspconfig = require("lspconfig")
