@@ -104,6 +104,9 @@ vim.keymap.set("i", "<C-l>", "<Right>", { desc = "Move Right" })
 vim.keymap.set("i", "<C-j>", "<Down>", { desc = "Move Down" })
 vim.keymap.set("i", "<C-k>", "<Up>", { desc = "Move Up" })
 
+-- Navigation command mode
+vim.keymap.set("c", "<C-h>", "<Left>", { desc = "Move Left" })
+vim.keymap.set("c", "<C-l>", "<Right>", { desc = "Move Right" })
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -139,8 +142,9 @@ require("lazy").setup({
     -- "gc" to comment visual regions/lines
     { import = "custom.plugins.comment" },
     -- Adds git related signs to the gutter, as well as utilities for managing changes
-    { import = "custom.plugins.gitsigns" },
-    { import = "custom.plugins.diffview" },
+    { import = "custom.plugins.git.gitsigns" },
+    { import = "custom.plugins.git.diffview" },
+    { import = "custom.plugins.git.lazygit" },
     -- Useful plugin to show you pending keybinds.
     { import = "custom.plugins.which-key" },
     -- Fuzzy Finder (files, lsp, etc)
