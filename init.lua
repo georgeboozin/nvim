@@ -177,6 +177,8 @@ require("lazy").setup({
     { import = "custom.plugins.debugger.dap" },
     { import = "custom.plugins.debugger.dap-ui" },
     { import = "custom.plugins.debugger.dap-virtual-text" },
+    { import = "custom.plugins.debugger.dap-vscode-js" },
+
     --javascript
     { import = "custom.plugins.ts-autotag" },
     -- code folding

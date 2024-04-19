@@ -97,6 +97,7 @@ return {
                 -- javascript
                 "typescript-language-server",
                 "eslint-lsp",
+                -- "js-debug-adapter",
             },
         })
 
