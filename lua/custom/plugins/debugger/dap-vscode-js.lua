@@ -1,6 +1,24 @@
+local js_based_languages = { "typescript", "javascript", "typescriptreact", "javascriptreact" }
+
+---@param config {args?:string[]|fun():string[]?}
+local function get_args(config)
+    local args = type(config.args) == "function" and (config.args() or {}) or config.args or {}
+    config = vim.deepcopy(config)
+
+    ---@cast args string[]
+    config.args = function()
+        ---@diagnostic disable-next-line: redundant-parameter
+        local new_args = vim.fn.input("Run with args: ", table.concat(args, " ")) --[[@as string]]
+        return vim.split(vim.fn.expand(new_args) --[[@as string]], " ")
+    end
+
+    return config
+end
+
 return {
     "mxsdev/nvim-dap-vscode-js",
     dependencies = {
+        { "stevearc/overseer.nvim", opts = { dap = false } },
         -- build debugger from source
         {
             "microsoft/vscode-js-debug",
@@ -12,72 +30,120 @@ return {
         },
     },
     config = function()
+        -- Use overseer for running preLaunchTask and postDebugTask.
+        require("overseer").patch_dap(true)
+
+        local map = vim.keymap.set
+        map("n", "<leader>da", function()
+            if vim.fn.filereadable(".vscode/launch.json") then
+                local dap_vscode = require("dap.ext.vscode")
+                dap_vscode.json_decode = require("overseer.json").decode
+                dap_vscode.load_launchjs(nil, {
+                    ["chrome"] = js_based_languages,
+                    ["node"] = js_based_languages,
+                    ["pwa-node"] = js_based_languages,
+                    ["pwa-chrome"] = js_based_languages,
+                    ["node-terminal"] = js_based_languages,
+                })
+            end
+            -- require("dap").continue({ before = get_args })
+            require("dap").continue()
+        end, { desc = "Run with Args" })
+
         require("dap-vscode-js").setup({
             debugger_path = vim.fn.stdpath("data") .. "/lazy/vscode-js-debug",
             adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
         })
-        for _, language in ipairs({ "typescript", "javascript", "svelte" }) do
-            require("dap").configurations[language] = {
-                -- attach to a node process that has been started with
-                -- `--inspect` for longrunning tasks or `--inspect-brk` for short tasks
-                -- npm script -> `node --inspect-brk ./node_modules/.bin/vite dev`
+        local dap = require("dap")
+        for _, language in ipairs(js_based_languages) do
+            dap.configurations[language] = {
+                -- Debug single nodejs files
                 {
+                    name = "Launch file",
                     type = "pwa-node",
                     request = "launch",
-                    name = "Launch (Node)",
                     program = "${file}",
+                    -- cwd = vim.fn.getcwd(),
                     cwd = "${workspaceFolder}",
-                    runtimeExecutable = "npx",
-                    runtimeArgs = { "tsx" },
-                },
-                {
-                    -- use nvim-dap-vscode-js's pwa-node debug adapter
-                    type = "pwa-node",
-                    -- attach to an already running node process with --inspect flag
-                    -- default port: 9222
-                    request = "attach",
-                    -- allows us to pick the process using a picker
-                    processId = require("dap.utils").pick_process,
-                    -- name of the debug action you have to select for this config
-                    name = "Attach debugger to existing `node --inspect` process",
-                    -- for compiled languages like TypeScript or Svelte.js
                     sourceMaps = true,
-                    -- resolve source maps in nested locations while ignoring node_modules
-                    resolveSourceMapLocations = {
-                        "${workspaceFolder}/**",
-                        "!**/node_modules/**",
+                    sourceMapPathOverrides = {
+                        ["./*"] = "${workspaceFolder}/src/*",
                     },
-                    -- path to src in vite based projects (and most other projects as well)
-                    cwd = "${workspaceFolder}/src",
-                    -- we don't want to debug code inside node_modules, so skip it!
-                    skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
+                },
+                -- Debug nodejs processes (make sure to add --inspect when you run the process)
+                {
+                    name = "Attach",
+                    type = "pwa-node",
+                    request = "attach",
+                    processId = require("dap.utils").pick_process,
+                    -- cwd = vim.fn.getcwd(),
+                    cwd = "${workspaceFolder}",
+                    sourceMaps = true,
                 },
                 {
-                    type = "pwa-chrome",
-                    name = "Launch Chrome to debug client",
+                    name = "Debug Jest Tests",
+                    type = "pwa-node",
                     request = "launch",
-                    url = "http://localhost:5173",
-                    sourceMaps = true,
-                    protocol = "inspector",
-                    port = 9222,
-                    webRoot = "${workspaceFolder}/src",
-                    -- skip files from vite's hmr
-                    skipFiles = { "**/node_modules/**/*", "**/@vite/*", "**/src/client/*", "**/src/*" },
+                    runtimeExecutable = "node",
+                    runtimeArgs = { "${workspaceFolder}/node_modules/.bin/jest", "--runInBand" },
+                    rootPath = "${workspaceFolder}",
+                    -- cwd = vim.fn.getcwd(),
+                    cwd = "${workspaceFolder}",
+                    console = "integratedTerminal",
+                    internalConsoleOptions = "neverOpen",
+                    -- args = {'${file}', '--coverage', 'false'},
+                    -- sourceMaps = true,
+                    -- skipFiles = {'<node_internals>/**', 'node_modules/**'},
                 },
-                -- only if language is javascript, offer this debug action
-                language == "javascript"
-                        and {
-                            -- use nvim-dap-vscode-js's pwa-node debug adapter
-                            type = "pwa-node",
-                            -- launch a new process to attach the debugger to
-                            request = "launch",
-                            -- name of the debug action you have to select for this config
-                            name = "Launch file in new node process",
-                            -- launch current file
-                            program = "${file}",
-                            cwd = "${workspaceFolder}",
-                        }
-                    or nil,
+                {
+                    name = "Debug Vitest Tests",
+                    type = "pwa-node",
+                    request = "launch",
+                    cwd = vim.fn.getcwd(),
+                    program = "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+                    args = { "run", "${file}" },
+                    autoAttachChildProcesses = true,
+                    smartStep = true,
+                    skipFiles = { "<node_internals>/**", "node_modules/**" },
+                },
+                -- Debug web applications (client side)
+                {
+                    name = "Launch & Debug Chrome",
+                    type = "pwa-chrome",
+                    request = "launch",
+                    url = function()
+                        local co = coroutine.running()
+                        return coroutine.create(function()
+                            vim.ui.input({ prompt = "Enter URL: ", default = "http://localhost:3000" }, function(url)
+                                if url == nil or url == "" then
+                                    return
+                                else
+                                    coroutine.resume(co, url)
+                                end
+                            end)
+                        end)
+                    end,
+                    webRoot = vim.fn.getcwd(),
+                    protocol = "inspector",
+                    sourceMaps = true,
+                    userDataDir = false,
+
+                    -- From https://github.com/lukas-reineke/dotfiles/blob/master/vim/lua/plugins/dap.lua
+                    -- To test how it behaves
+                    rootPath = "${workspaceFolder}",
+                    cwd = "${workspaceFolder}",
+                    console = "integratedTerminal",
+                    internalConsoleOptions = "neverOpen",
+                    sourceMapPathOverrides = {
+                        ["./*"] = "${workspaceFolder}/src/*",
+                    },
+                },
+                -- Divider for the launch.json derived configs
+                {
+                    name = "----- ↓ launch.json configs (if available) ↓ -----",
+                    type = "",
+                    request = "launch",
+                },
             }
         end
     end,
