@@ -18,12 +18,15 @@ return {
 
             -- custom mappings
             vim.keymap.set("n", "?", api.tree.toggle_help, opts("Help"))
-            vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Nvimtree Toggle window" })
         end
 
         -- pass to setup along with your other options
         require("nvim-tree").setup({
             on_attach = my_on_attach,
+            filters = {
+                git_ignored = false,
+            },
         })
+        vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Nvimtree Toggle window" })
     end,
 }
