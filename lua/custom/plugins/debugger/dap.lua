@@ -8,6 +8,22 @@ return {
             vim.cmd.RustLsp("debuggables")
         end, { desc = "Start debugging" })
 
+        map("n", "<leader>da", function()
+            if vim.fn.filereadable(".vscode/launch.json") then
+                local dap_vscode = require("dap.ext.vscode")
+                local js_based_languages = { "typescript", "javascript", "typescriptreact", "javascriptreact" }
+                -- dap_vscode.json_decode = require("overseer.json").decode
+                dap_vscode.load_launchjs(nil, {
+                    ["chrome"] = js_based_languages,
+                    ["node"] = js_based_languages,
+                    ["pwa-node"] = js_based_languages,
+                    ["pwa-chrome"] = js_based_languages,
+                    ["node-terminal"] = js_based_languages,
+                })
+            end
+            require("dap").continue({ before = get_args })
+        end, { desc = "Run with Args" })
+
         map("n", "<leader>db", function()
             require("dap").toggle_breakpoint()
         end, { desc = "Toggle breakpoint" })
