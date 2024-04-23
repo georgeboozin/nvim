@@ -98,6 +98,8 @@ return {
                 "typescript-language-server",
                 "eslint-lsp",
                 -- "js-debug-adapter",
+                -- css
+                "css-lsp",
             },
         })
 
@@ -113,6 +115,10 @@ return {
         })
 
         lspconfig.tsserver.setup({
+            capabilities = capabilities,
+        })
+
+        lspconfig.cssls.setup({
             capabilities = capabilities,
         })
 
