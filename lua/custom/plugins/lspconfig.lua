@@ -97,6 +97,7 @@ return {
                 -- javascript
                 "typescript-language-server",
                 "eslint-lsp",
+                "prettierd",
                 -- "js-debug-adapter",
                 -- css
                 "css-lsp",

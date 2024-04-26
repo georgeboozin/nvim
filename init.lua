@@ -181,6 +181,8 @@ require("lazy").setup({
 
     --javascript
     { import = "custom.plugins.ts-autotag" },
+    -- javascript prettier
+    { import = "custom.plugins.none-ls" },
     -- code folding
     { import = "custom.plugins.nvim-ufo" },
     -- indent line or code block line
