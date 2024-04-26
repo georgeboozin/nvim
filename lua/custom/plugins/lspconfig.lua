@@ -103,6 +103,8 @@ return {
                 "css-lsp",
                 -- golang
                 "gopls",
+                -- python
+                "pyright",
             },
         })
 
@@ -142,6 +144,17 @@ return {
                     },
                 },
             },
+        })
+
+        lspconfig.pyright.setup({
+            capabilities = capabilities,
+            settings = {
+                pyright = {
+                    -- disableLanguageServices = true,
+                    -- disableOrganizeImports = true,
+                },
+            },
+            filetypes = { "python" },
         })
 
         local signs = {
