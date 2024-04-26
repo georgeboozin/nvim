@@ -100,6 +100,8 @@ return {
                 -- "js-debug-adapter",
                 -- css
                 "css-lsp",
+                -- golang
+                "gopls",
             },
         })
 
@@ -124,6 +126,21 @@ return {
 
         lspconfig.eslint.setup({
             capabilities = capabilities,
+        })
+
+        lspconfig.gopls.setup({
+            capabilities = capabilities,
+            cmd = { "gopls" },
+            filetypes = { "go", "gomod", "gowork", "gotmpl" },
+            settings = {
+                gopls = {
+                    completeUnimported = true,
+                    usePlaceholders = true,
+                    analyses = {
+                        unusedparams = true,
+                    },
+                },
+            },
         })
 
         local signs = {
