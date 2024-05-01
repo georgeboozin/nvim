@@ -175,6 +175,8 @@ require("lazy").setup({
     { import = "custom.plugins.nvim-tree" },
     -- UI tabs
     { import = "custom.plugins.barbar" },
+    -- UI start screen
+    { import = "custom.plugins.ui.alpha" },
     -- debugger
     { import = "custom.plugins.debugger.dap" },
     { import = "custom.plugins.debugger.dap-ui" },
