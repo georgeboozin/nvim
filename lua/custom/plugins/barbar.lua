@@ -26,7 +26,8 @@ return {
         })
         local map = vim.keymap.set
 
-        map("n", "<leader>b", "<cmd>enew<CR>", { desc = "Buffer New" })
+        -- map("n", "<leader>b", "<cmd>enew<CR>", { desc = "Buffer New" })
+        map("n", "<leader>bc", "<cmd>BufferCloseAllButCurrent<CR>", { desc = "Buffer Close All but not current" })
 
         map("n", "<tab>", "<cmd>BufferNext<CR>", { desc = "Buffer Goto next" })
 

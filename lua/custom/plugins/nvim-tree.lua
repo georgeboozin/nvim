@@ -26,7 +26,18 @@ return {
             filters = {
                 git_ignored = false,
             },
+            -- focus current file
+            sync_root_with_cwd = true,
+            update_focused_file = {
+                enable = true,
+                update_root = false,
+            },
         })
         vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Nvimtree Toggle window" })
+        -- custom focus file
+        -- vim.keymap.set("n", "<leader>r", function()
+        --     local api = require("nvim-tree.api")
+        --     api.tree.find_file({ open = true, focus = false })
+        -- end, { desc = "Nvimtree Toggle window" })
     end,
 }

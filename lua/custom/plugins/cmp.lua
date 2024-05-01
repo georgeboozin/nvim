@@ -33,6 +33,7 @@ return { -- Autocompletion
         --  into multiple repos for maintenance purposes.
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-path",
+        "mlaursen/vim-react-snippets",
     },
     config = function()
         -- See `:help cmp`
@@ -140,5 +141,6 @@ return { -- Autocompletion
                 { name = "path" },
             },
         })
+        require("vim-react-snippets").lazy_load()
     end,
 }

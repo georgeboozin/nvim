@@ -145,6 +145,8 @@ require("lazy").setup({
     { import = "custom.plugins.git.gitsigns" },
     { import = "custom.plugins.git.diffview" },
     { import = "custom.plugins.git.lazygit" },
+    { import = "custom.plugins.git.git-blame" },
+
     -- Useful plugin to show you pending keybinds.
     { import = "custom.plugins.which-key" },
     -- Fuzzy Finder (files, lsp, etc)
