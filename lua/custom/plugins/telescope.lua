@@ -54,6 +54,10 @@ return { -- Fuzzy Finder (files, lsp, etc)
             --   },
             -- },
             -- pickers = {}
+            defaults = {
+                dynamic_preview_title = true,
+                -- path_display = "smart",
+            },
             extensions = {
                 ["ui-select"] = {
                     require("telescope.themes").get_dropdown(),
@@ -88,7 +92,12 @@ return { -- Fuzzy Finder (files, lsp, etc)
         vim.keymap.set("n", "<leader>s.", function()
             require("custom.plugins.telescope-pickers").prettyFilesPicker({ picker = "oldfiles" })
         end, { desc = '[S]earch Recent Files ("." for repeat)' })
-        vim.keymap.set("n", "<leader>st", builtin.buffers, { desc = "[ ] Find existing buffers" })
+
+        -- vim.keymap.set("n", "<leader>st", builtin.buffers, { desc = "[S]earch [R]esume" })
+
+        vim.keymap.set("n", "<leader>st", function()
+            require("custom.plugins.telescope-pickers").prettyBuffersPicker({ picker = "buffers" })
+        end, { desc = "[ ] Find existing buffers" })
 
         -- Slightly advanced example of overriding default behavior and theme
         vim.keymap.set("n", "<leader>sz", function()

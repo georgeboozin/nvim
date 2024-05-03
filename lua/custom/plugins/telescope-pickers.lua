@@ -139,6 +139,98 @@ function telescopePickers.prettyFilesPicker(pickerAndOptions)
     end
 end
 
+function telescopePickers.prettyBuffersPicker(pickerAndOptions)
+    -- Parameter integrity check
+    if type(pickerAndOptions) ~= "table" or pickerAndOptions.picker == nil then
+        print(
+            "Incorrect argument format. Correct format is: { picker = 'desiredPicker', (optional) options = { ... } }"
+        )
+
+        -- Avoid further computation
+        return
+    end
+
+    -- Ensure 'options' integrity
+    options = pickerAndOptions.options or {}
+
+    -- Use Telescope's existing function to obtain a default 'entry_maker' function
+    -- ----------------------------------------------------------------------------
+    -- INSIGHT: Because calling this function effectively returns an 'entry_maker' function that is ready to
+    --          handle entry creation, we can later call it to obtain the final entry table, which will
+    --          ultimately be used by Telescope to display the entry by executing its 'display' key function.
+    --          This reduces our work by only having to replace the 'display' function in said table instead
+    --          of having to manipulate the rest of the data too.
+    local originalEntryMaker = telescopeMakeEntryModule.gen_from_buffer(options)
+
+    -- INSIGHT: 'entry_maker' is the hardcoded name of the option Telescope reads to obtain the function that
+    --          will generate each entry.
+    -- INSIGHT: The paramenter 'line' is the actual data to be displayed by the picker, however, its form is
+    --          raw (type 'any) and must be transformed into an entry table.
+    options.entry_maker = function(line)
+        -- Generate the Original Entry table
+        local originalEntryTable = originalEntryMaker(line)
+
+        -- INSIGHT: An "entry display" is an abstract concept that defines the "container" within which data
+        --          will be displayed inside the picker, this means that we must define options that define
+        --          its dimensions, like, for example, its width.
+        local displayer = telescopeEntryDisplayModule.create({
+            separator = " ", -- Telescope will use this separator between each entry item
+            items = {
+                { width = 2 },
+                { width = 4 },
+                { width = fileTypeIconWidth },
+                { width = nil },
+                { remaining = true },
+            },
+        })
+
+        -- LIFECYCLE: At this point the "displayer" has been created by the create() method, which has in turn
+        --            returned a function. This means that we can now call said function by using the
+        --            'displayer' variable and pass it actual entry values so that it will, in turn, output
+        --            the entry for display.
+        --
+        -- INSIGHT: We now have to replace the 'display' key in the original entry table to modify the way it
+        --          is displayed.
+        -- INSIGHT: The 'entry' is the same Original Entry Table but is is passed to the 'display()' function
+        --          later on the program execution, most likely when the actual display is made, which could
+        --          be deferred to allow lazy loading.
+        --
+        -- HELP: Read the 'make_entry.lua' file for more info on how all of this works
+        originalEntryTable.display = function(entry)
+            -- Get the Tail and the Path to display
+            local tail, pathToDisplay = telescopePickers.getPathAndTail(entry.value)
+
+            -- Add an extra space to the tail so that it looks nicely separated from the path
+            local tailForDisplay = tail .. ":" .. entry.lnum .. " "
+
+            -- Get the Icon with its corresponding Highlight information
+            local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
+
+            -- INSIGHT: This return value should be a tuple of 2, where the first value is the actual value
+            --          and the second one is the highlight information, this will be done by the displayer
+            --          internally and return in the correct format.
+            return displayer({
+                { entry.bufnr, "TelescopeResultsNumber" },
+                { entry.indicator, "TelescopeResultsComment" },
+                { icon, iconHighlight },
+                tailForDisplay,
+                { pathToDisplay, "TelescopeResultsComment" },
+            })
+        end
+
+        return originalEntryTable
+    end
+
+    -- Finally, check which file picker was requested and open it with its associated options
+    if pickerAndOptions.picker == "buffers" then
+        require("telescope.builtin").buffers(options)
+    elseif pickerAndOptions.picker == "" then
+        print("Picker was not specified")
+    else
+        print("Picker is not supported by Pretty Find Buffer")
+    end
+end
+
 -- Generates a Grep Search picker but beautified
 -- ----------------------------------------------
 -- This is a wrapping function used to modify the appearance of pickers that provide Grep Search
@@ -267,5 +359,56 @@ function telescopePickers.prettyGrepPicker(pickerAndOptions)
     end
 end
 
--- Return the module for use
+function telescopePickers.prettyLSPPicker(pickerAndOptions)
+    if type(pickerAndOptions) ~= "table" or pickerAndOptions.picker == nil then
+        print(
+            "Incorrect argument format. Correct format is: { picker = 'desiredPicker', (optional) options = { ... } }"
+        )
+
+        return
+    end
+
+    options = pickerAndOptions.options or {}
+
+    local originalEntryMaker = telescopeMakeEntryModule.gen_from_quickfix(options)
+
+    options.entry_maker = function(line)
+        local originalEntryTable = originalEntryMaker(line)
+
+        local displayer = telescopeEntryDisplayModule.create({
+            separator = " ", -- Telescope will use this separator between each entry item
+            items = {
+                { width = fileTypeIconWidth },
+                { width = nil },
+                { remaining = true },
+            },
+        })
+
+        originalEntryTable.display = function(entry)
+            print(vim.inspect(entry))
+            local tail, pathToDisplay = telescopePickers.getPathAndTail(entry.value.filename)
+
+            local tailForDisplay = tail .. ":" .. entry.lnum .. " "
+
+            local icon, iconHighlight = telescopeUtilities.get_devicons(tail)
+
+            return displayer({
+                { icon, iconHighlight },
+                tailForDisplay,
+                { pathToDisplay, "TelescopeResultsComment" },
+            })
+        end
+
+        return originalEntryTable
+    end
+
+    if pickerAndOptions.picker == "lsp_references" then
+        require("telescope.builtin").lsp_references(options)
+    elseif pickerAndOptions.picker == "" then
+        print("Picker was not specified")
+    else
+        print("Picker is not supported by Pretty Find Buffer")
+    end
+end
+
 return telescopePickers
