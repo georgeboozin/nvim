@@ -37,6 +37,8 @@ return {
             typescript = { { "prettierd" } },
             javascriptreact = { { "prettierd" } },
             typescriptreact = { { "prettierd" } },
+            html = { { "prettierd" } },
+            json = { { "prettierd" } },
         },
     },
 }
