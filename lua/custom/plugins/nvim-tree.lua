@@ -36,6 +36,33 @@ return {
                 open_file = {
                     resize_window = false,
                 },
+                change_dir = {
+                    -- enable = true,
+                    -- global = false,
+                    restrict_above_cwd = true,
+                },
+            },
+            view = {
+                -- float = {
+                --     enable = true,
+                -- },
+                width = {
+                    min = 30,
+                    max = -1,
+                },
+            },
+            diagnostics = {
+                enable = true,
+            },
+            modified = {
+                enable = true,
+            },
+            -- hijack_cursor = true,
+            renderer = {
+                indent_width = 1,
+                root_folder_label = function(path)
+                    return vim.fn.fnamemodify(path, ":t")
+                end,
             },
         })
         vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Nvimtree Toggle window" })
