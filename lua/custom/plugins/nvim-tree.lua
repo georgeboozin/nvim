@@ -32,6 +32,11 @@ return {
                 enable = true,
                 update_root = false,
             },
+            actions = {
+                open_file = {
+                    resize_window = false,
+                },
+            },
         })
         vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Nvimtree Toggle window" })
         -- custom focus file
