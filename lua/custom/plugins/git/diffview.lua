@@ -7,7 +7,9 @@ return {
         map("n", "<leader>gdh", "<cmd> DiffviewFileHistory<CR>", { desc = "Open File History" })
         require("diffview").setup({
             hooks = {
+                -- TODO: figure out which hook `diff_buf_read` or `view_opened` is needed
                 diff_buf_read = function(bufnr)
+                    -- TODO: figure out which opt or opt_local is needed
                     vim.opt_local.foldmethod = "expr"
                     vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
                     vim.opt_local.foldcolumn = "0" -- '0' or '1' is not bad
@@ -20,6 +22,7 @@ return {
                     -- print("diff_buf_read!")
                 end,
                 view_opened = function(view)
+                    -- TODO: figure out which opt or opt_local is needed
                     vim.opt_local.foldmethod = "expr"
                     vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
                     vim.opt.foldmethod = "expr"
