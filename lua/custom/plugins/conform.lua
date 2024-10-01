@@ -1,3 +1,14 @@
+local function first(bufnr, ...)
+    local conform = require("conform")
+    for i = 1, select("#", ...) do
+        local formatter = select(i, ...)
+        if conform.get_formatter_info(formatter, bufnr).available then
+            return formatter
+        end
+    end
+    return select(1, ...)
+end
+
 return {
     "stevearc/conform.nvim",
     lazy = false,
@@ -33,12 +44,24 @@ return {
             --
             -- You can use a sub-list to tell conform to run *until* a formatter
             -- is found.
-            javascript = { { "prettierd" } },
-            typescript = { { "prettierd" } },
-            javascriptreact = { { "prettierd" } },
-            typescriptreact = { { "prettierd" } },
-            html = { { "prettierd" } },
-            json = { { "prettierd" } },
+            javascript = function(bufnr)
+                return { first(bufnr, "prettierd"), "injected" }
+            end,
+            typescript = function(bufnr)
+                return { first(bufnr, "prettierd"), "injected" }
+            end,
+            javascriptreact = function(bufnr)
+                return { first(bufnr, "prettierd"), "injected" }
+            end,
+            typescriptreact = function(bufnr)
+                return { first(bufnr, "prettierd"), "injected" }
+            end,
+            html = function(bufnr)
+                return { first(bufnr, "prettierd"), "injected" }
+            end,
+            json = function(bufnr)
+                return { first(bufnr, "prettierd"), "injected" }
+            end,
         },
     },
 }
