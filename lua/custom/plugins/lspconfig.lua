@@ -109,6 +109,8 @@ return {
                 "gopls",
                 -- python
                 "pyright",
+                -- groovy
+                "groovy-language-server",
             },
         })
 
@@ -159,6 +161,17 @@ return {
                 },
             },
             filetypes = { "python" },
+        })
+
+        local groovylsPath = vim.env.HOME
+            .. "/.local/share/nvim/mason/packages/groovy-language-server/build/libs/groovy-language-server-all.jar"
+        lspconfig.groovyls.setup({
+            capabilities = capabilities,
+            cmd = {
+                "java",
+                "-jar",
+                groovylsPath,
+            },
         })
 
         local signs = {
