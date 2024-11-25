@@ -77,7 +77,12 @@ return { -- Fuzzy Finder (files, lsp, etc)
         vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
         vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
         vim.keymap.set("n", "<leader>sf", function()
-            require("custom.plugins.telescope-pickers").prettyFilesPicker({ picker = "find_files" })
+            require("custom.plugins.telescope-pickers").prettyFilesPicker({
+                picker = "find_files",
+                options = {
+                    hidden = true,
+                },
+            })
         end, { desc = "[S]earch [F]iles" })
         vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
         vim.keymap.set("n", "<leader>sw", function()

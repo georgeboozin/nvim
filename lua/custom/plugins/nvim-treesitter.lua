@@ -16,6 +16,7 @@ return { -- Highlight, edit, and navigate code
             "javascript",
             "typescript",
             "tsx",
+            "groovy",
         },
         -- Autoinstall languages that are not installed
         auto_install = true,
