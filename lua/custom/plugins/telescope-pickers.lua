@@ -385,7 +385,7 @@ function telescopePickers.prettyLSPPicker(pickerAndOptions)
         })
 
         originalEntryTable.display = function(entry)
-            print(vim.inspect(entry))
+            -- print(vim.inspect(entry.value))
             local tail, pathToDisplay = telescopePickers.getPathAndTail(entry.value.filename)
 
             local tailForDisplay = tail .. ":" .. entry.lnum .. " "

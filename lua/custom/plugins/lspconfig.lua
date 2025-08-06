@@ -28,6 +28,8 @@ return {
                     require("custom.plugins.telescope-pickers").prettyLSPPicker({ picker = "lsp_references" })
                 end, "[G]oto [R]eferences")
 
+                -- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+
                 -- Jump to the implementation of the word under your cursor.
                 --  Useful when your language has ways of declaring types without an actual implementation.
                 map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
@@ -125,7 +127,7 @@ return {
             },
         })
 
-        lspconfig.tsserver.setup({
+        lspconfig.ts_ls.setup({
             capabilities = capabilities,
         })
 

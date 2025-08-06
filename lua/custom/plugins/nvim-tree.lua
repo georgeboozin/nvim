@@ -18,12 +18,40 @@ return {
 
             -- custom mappings
             vim.keymap.set("n", "?", api.tree.toggle_help, opts("Help"))
+            vim.keymap.set("n", "<leader>hn", function()
+                api.tree.toggle_custom_filter()
+            end, { noremap = true, silent = false })
+
+            local function grep_at_current_tree_node()
+                local nvim_tree_api = require("nvim-tree.api")
+
+                local node = nvim_tree_api.tree.get_node_under_cursor()
+                if not node then
+                    return
+                end
+                -- require("telescope.builtin").live_grep({ search_dirs = { node.absolute_path } })
+
+                require("custom.plugins.telescope-pickers").prettyGrepPicker({
+                    picker = "live_grep",
+                    options = {
+                        search_dirs = { node.absolute_path },
+                    },
+                })
+            end
+
+            vim.keymap.set(
+                "n",
+                "<leader>scg",
+                grep_at_current_tree_node,
+                { desc = "[S]earch under [C]ursor by [G]rep" }
+            )
         end
 
         -- pass to setup along with your other options
         require("nvim-tree").setup({
             on_attach = my_on_attach,
             filters = {
+                custom = { "node_modules" },
                 git_ignored = false,
             },
             -- focus current file
@@ -66,6 +94,7 @@ return {
             },
         })
         vim.keymap.set("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "Nvimtree Toggle window" })
+
         -- custom focus file
         -- vim.keymap.set("n", "<leader>r", function()
         --     local api = require("nvim-tree.api")
