@@ -94,6 +94,8 @@ return {
 
         require("mason-tool-installer").setup({
             ensure_installed = {
+                -- nvim base
+                "tree-sitter-cli",
                 -- rust
                 "rust-analyzer",
                 "codelldb",
@@ -116,65 +118,62 @@ return {
             },
         })
 
-        local lspconfig = require("lspconfig")
-        lspconfig.lua_ls.setup({
-            settings = {
-                Lua = {
-                    completion = {
-                        callSnippet = "Replace",
+        local servers = {
+            lua_ls = {
+                settings = {
+                    Lua = {
+                        completion = {
+                            callSnippet = "Replace",
+                        },
                     },
                 },
             },
-        })
-
-        lspconfig.ts_ls.setup({
-            capabilities = capabilities,
-        })
-
-        lspconfig.cssls.setup({
-            capabilities = capabilities,
-        })
-
-        lspconfig.eslint.setup({
-            capabilities = capabilities,
-        })
-
-        lspconfig.gopls.setup({
-            capabilities = capabilities,
-            cmd = { "gopls" },
-            filetypes = { "go", "gomod", "gowork", "gotmpl" },
-            settings = {
-                gopls = {
-                    completeUnimported = true,
-                    usePlaceholders = true,
-                    analyses = {
-                        unusedparams = true,
+            ts_ls = {
+                capabilities = capabilities,
+            },
+            cssls = {
+                capabilities = capabilities,
+            },
+            eslint = {
+                capabilities = capabilities,
+            },
+            gopls = {
+                capabilities = capabilities,
+                cmd = { "gopls" },
+                filetypes = { "go", "gomod", "gowork", "gotmpl" },
+                settings = {
+                    gopls = {
+                        completeUnimported = true,
+                        usePlaceholders = true,
+                        analyses = {
+                            unusedparams = true,
+                        },
                     },
                 },
             },
-        })
-
-        lspconfig.pyright.setup({
-            capabilities = capabilities,
-            settings = {
-                pyright = {
-                    -- disableLanguageServices = true,
-                    -- disableOrganizeImports = true,
+            pyright = {
+                capabilities = capabilities,
+                settings = {
+                    pyright = {},
+                },
+                filetypes = { "python" },
+            },
+            groovyls = {
+                capabilities = capabilities,
+                cmd = {
+                    "java",
+                    "-jar",
+                    vim.env.HOME
+                        .. "/.local/share/nvim/mason/packages/groovy-language-server/build/libs/groovy-language-server-all.jar",
                 },
             },
-            filetypes = { "python" },
-        })
+        }
 
-        local groovylsPath = vim.env.HOME
-            .. "/.local/share/nvim/mason/packages/groovy-language-server/build/libs/groovy-language-server-all.jar"
-        lspconfig.groovyls.setup({
-            capabilities = capabilities,
-            cmd = {
-                "java",
-                "-jar",
-                groovylsPath,
-            },
-        })
+        -- register and turn on each server
+        for name, config in pairs(servers) do
+            vim.lsp.config(name, config)
+            vim.lsp.enable(name)
+        end
 
         local signs = {
             Error = "",

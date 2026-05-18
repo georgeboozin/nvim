@@ -31,7 +31,9 @@ return {
     },
     config = function()
         -- Use overseer for running preLaunchTask and postDebugTask.
-        require("overseer").patch_dap(true)
+        require("overseer").setup({
+            dap = true,
+        })
 
         local map = vim.keymap.set
         map("n", "<leader>da", function()

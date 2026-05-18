@@ -141,6 +141,6 @@ return { -- Autocompletion
                 { name = "path" },
             },
         })
-        require("vim-react-snippets").lazy_load()
+        require("vim-react-snippets").setup({})
     end,
 }
