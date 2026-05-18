@@ -10,6 +10,7 @@ return {
                 "typescript",
                 "tsx",
                 "bash",
+                "zsh",
                 "c",
                 "html",
                 "luadoc",
