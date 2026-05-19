@@ -189,7 +189,6 @@ require("lazy").setup({
     { import = "custom.plugins.autopairs" },
     -- You can easily change to a different colorscheme.
     { import = "custom.plugins.ui.catppuccin" },
-    --{ import = "custom.plugins.ui.tokyonight" },
     -- Highlight todo, notes, etc in comments
     { import = "custom.plugins.todo-comments" },
     -- Collection of various small independent plugins/modules
